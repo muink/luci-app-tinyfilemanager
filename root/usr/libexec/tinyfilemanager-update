@@ -1,0 +1,96 @@
+#!/bin/bash
+# dependent: curl tar 
+#
+# LuCI Tiny File Manager
+# Author: muink
+# Github: https://github.com/muink/luci-app-tinyfilemanager
+#
+
+# PKGInfo
+REPOURL='https://github.com/prasathmani/tinyfilemanager'
+PKGNAME='tinyfilemanager'
+VERSION="$1"; VERSION="${VERSION:=2.4.7}"
+#
+PKG_DIR=$PKGNAME-$VERSION
+REF_DIR="refer"
+#
+INDEXPHP="tinyfilemanager.php"
+CFGSAMPl="config-sample.php"
+LANGFILE="translation.json"
+
+
+WORKDIR="/www/$PKGNAME"
+mkdir -p "$WORKDIR" 2>/dev/null
+cd $WORKDIR
+
+
+
+# Clear Old version
+rm -rf *
+
+# Download Repository
+curl -sSL ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C /tmp
+
+# Preprocessing
+FM_HIGHLIGHTJS_STYLE=$(sed -En "/defined\b.+\bFM_HIGHLIGHTJS_STYLE/ {s|(.+define\('FM_HIGHLIGHTJS_STYLE', *)([^ \)]+)(.+)|\2| p}" /tmp/$PKG_DIR/$INDEXPHP | xargs -I{} sed -n "s/{} = '\([^']*\)'.*/\1/ p" /tmp/$PKG_DIR/$INDEXPHP)
+sed -i "s|<?php echo FM_HIGHLIGHTJS_STYLE ?>|\$FM_HIGHLIGHTJS_STYLE|g" /tmp/$PKG_DIR/$INDEXPHP
+
+# Download CDN Used
+mkdir -p "$REF_DIR" 2>/dev/null
+refurl=($(sed -En "s,^.+=\"(http(s)?://.+\.(css|js))\".+,\1, p" /tmp/$PKG_DIR/$INDEXPHP | sort -u ))
+ref=
+url=
+out=
+path=
+
+for _i in $(seq 0 1 $[ ${#refurl[@]} -1 ]); do
+    eval "url=${refurl[$_i]}"
+    out=${url##*/}
+    path="$REF_DIR/${url#http*://}"
+
+    mkdir -p "${path%/*}" 2>/dev/null
+    curl -sSLo $out $url
+    mv -f $out "${path%/*}"
+done
+
+ref=$(for _p in $(find * -type f); do \
+        sed -E "s/(,|;)/\1\n/g" $_p | grep -E "\burl\([^\)]+\)" | grep -Ev "\burl\(\"data:image" >/dev/null; \
+        [ "$?" == "0" ] && echo $_p; \
+    done)
+
+for _i in $ref; do
+    suburl=($(sed -E "s/(,|;)/\1\n/g" $_i | grep -E "\burl\([^\)]+\)" | grep -Ev "\burl\(\"data:image" | sed -En "s|^[^']+'([^']+)'.+|\1| p"))
+    hosturl=$(for _ in "${refurl[@]}"; do echo "$_" | grep "${_i##*/}"; done)
+
+    for _j in $(seq 0 1 $[ ${#suburl[@]} -1 ]); do
+        url="${suburl[$_j]}"
+        out=${url%%\?*}
+        path="$REF_DIR/${hosturl#http*://}"
+
+        mkdir -p "${path%/*}/${out%/*}" 2>/dev/null
+        curl -sSLo ${out##*/} "${hosturl%/*}/$url"
+        mv -f ${out##*/} "${path%/*}/$out"
+    done
+done
+
+# Post-processing
+sed -i "s|\$FM_HIGHLIGHTJS_STYLE|<?php echo FM_HIGHLIGHTJS_STYLE ?>|g" /tmp/$PKG_DIR/$INDEXPHP
+
+# Migrating to Local Reference
+sed -Ei "s,^(.+=\")(http(s)?://)(.+\.(css|js))(\".+),\1$REF_DIR/\4\6," /tmp/$PKG_DIR/$INDEXPHP
+
+# Clean up and Done
+mv -f /tmp/$PKG_DIR/$INDEXPHP ./index.php
+mv -f /tmp/$PKG_DIR/$CFGSAMPl .
+mv -f /tmp/$PKG_DIR/$LANGFILE .
+[ ! -d /www/tinyfilemanager/rootfs ] && ln -s / /www/tinyfilemanager/rootfs
+
+
+
+#$(INSTALL_DIR) $(1)/usr/libexec
+#$(INSTALL_DIR) $(1)/www/$PKGNAME
+#$(INSTALL_BIN) run.sh $(1)/usr/libexec/$PKGNAME
+#$(CP) $PKG_DIR/$INDEXPHP $(1)/www/$PKGNAME/index.php
+#$(CP) $PKG_DIR/$CFGSAMPl $(1)/www/$PKGNAME/$CFGSAMPl
+#$(CP) $PKG_DIR/$LANGFILE $(1)/www/$PKGNAME/$LANGFILE
+#$(CP) --parents -rf $REF_DIR/ $(1)/www/$PKGNAME/
