@@ -1,0 +1,74 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2022 muink
+
+. /lib/functions.sh
+
+START=51
+USE_PROCD=1
+
+CONFIG_NAME='tinyfilemanager'
+TYPEDSECTION='main'
+
+WORKDIR="/www/tinyfilemanager"
+VARDIR="/var/tinyfilemanager"
+
+HOMEPATH="tinyfilemanager/rootfs"
+
+
+
+init_config() {
+	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/$HOMEPATH';|; \
+			 s|(^\\\$root_url =)(.+)|\1 '$HOMEPATH';|; \
+
+			 s|(^\\\$default_timezone =)(.+)|\1 '$(uci get system.@system[0].zonename)';| \
+	" "$1"
+}
+
+apply_config() {
+	local ucivv="use_auth root_path date_format time_format show_second favicon_path online_viewer max_upload_size"
+
+	for _var in $ucivv; do
+		eval "local $_var=\$(config_get $1 $_var 2>/dev/null)"
+	done
+	local auth_users=$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].auth_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|:|' => '|g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+	local readonly_users=$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].readonly_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+
+
+[ "$use_auth" -eq "1" ] && sed -Ei "s|(^\\\$use_auth =)(.+)|\1 true;|" "$2" || sed -Ei "s|(^\\\$use_auth =)(.+)|\1 false;|" "$2"
+sed -Ei "/^\\\$auth_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$auth_users /a\ $auth_users" "$2"
+sed -Ei "/^\\\$readonly_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$readonly_users /a\ $readonly_users" "$2"
+sed -Ei "s|(^\\\$default_timezone =)(.+)|\1 '$(uci get system.@system[0].zonename)';|" "$2"
+if [ -n "$root_path" ]; then
+	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/${HOMEPATH}$root_path';|; \
+			 s|(^\\\$root_url =)(.+)|\1 '${HOMEPATH}$root_path';| \
+	" "$2"
+fi
+sed -Ei "s|(^\\\$datetime_format =)(.+)|\1 '$date_format $time_format';|" "$2"
+[ "$show_second" -eq "0" ] && sed -Ei "/^\\\$datetime_format =/{s|:s||}" "$2"
+sed -Ei "s|(^\\\$favicon_path =)(.+)|\1 '$favicon_path';|" "$2"
+if [ "$online_viewer" == "0" ]; then sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 false;|" "$2"
+else sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 '$online_viewer';|" "$2"
+fi
+if [ "$[ $max_upload_size +0 ]" == "0" ]; then sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 26214400;|" "$2" #25M
+else sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 $(( $max_upload_size * 1024**2 ));|" "$2"
+fi
+}
+
+start_service() {
+	mkdir $VARDIR 2>/dev/null
+	cp -f "$WORKDIR/config-sample.php" "$VARDIR/config.php"
+	rm -rf "$WORKDIR/config.php"
+	ln -s "$VARDIR/config.php" "$WORKDIR/config.php" 2>/dev/null
+	init_config "$VARDIR/config.php"
+
+	config_load "$CONFIG_NAME"
+	config_foreach apply_config "$TYPEDSECTION" "$VARDIR/config.php"
+}
+
+service_triggers() {
+	procd_add_reload_trigger "$CONFIG_NAME" 'system'
+}
+
+restart() {
+	start
+}

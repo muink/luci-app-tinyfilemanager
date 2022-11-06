@@ -12,7 +12,7 @@ PKGNAME='tinyfilemanager'
 VERSION="$1"; VERSION="${VERSION:=2.4.7}"
 #
 PKG_DIR=$PKGNAME-$VERSION
-REF_DIR="refer"
+REF_DIR="vendor"
 #
 INDEXPHP="tinyfilemanager.php"
 CFGSAMPl="config-sample.php"
@@ -32,7 +32,7 @@ rm -rf *
 curl -sSL ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C /tmp
 
 # Preprocessing
-FM_HIGHLIGHTJS_STYLE=$(sed -En "/defined\b.+\bFM_HIGHLIGHTJS_STYLE/ {s|(.+define\('FM_HIGHLIGHTJS_STYLE', *)([^ \)]+)(.+)|\2| p}" /tmp/$PKG_DIR/$INDEXPHP | xargs -I{} sed -n "s/{} = '\([^']*\)'.*/\1/ p" /tmp/$PKG_DIR/$INDEXPHP)
+FM_HIGHLIGHTJS_STYLE=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" /tmp/$PKG_DIR/$INDEXPHP)
 sed -i "s|<?php echo FM_HIGHLIGHTJS_STYLE ?>|\$FM_HIGHLIGHTJS_STYLE|g" /tmp/$PKG_DIR/$INDEXPHP
 
 # Download CDN Used
@@ -84,6 +84,7 @@ mv -f /tmp/$PKG_DIR/$INDEXPHP ./index.php
 mv -f /tmp/$PKG_DIR/$CFGSAMPl .
 mv -f /tmp/$PKG_DIR/$LANGFILE .
 [ ! -d /www/tinyfilemanager/rootfs ] && ln -s / /www/tinyfilemanager/rootfs
+/etc/init.d/tinyfilemanager start
 
 
 
