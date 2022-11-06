@@ -1,0 +1,14 @@
+{
+  "luci-app-tinyfilemanager": {
+    "description": "Grant access to tinyfilemanager procedures",
+    "read": {
+      "file": {
+        "/usr/libexec/tinyfilemanager-update": [ "exec" ]
+      },
+      "uci": [ "tinyfilemanager" ]
+    },
+    "write": {
+      "uci": [ "tinyfilemanager" ]
+    }
+  }
+}
