@@ -14,6 +14,10 @@ VARDIR="/var/tinyfilemanager"
 
 HOMEPATH="tinyfilemanager/rootfs"
 
+if [ "$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_enabled 2>/dev/null)" == "1" ]; then
+    export ALL_PROXY=$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_protocol 2>/dev/null)://$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_server 2>/dev/null)
+fi
+
 
 
 init_config() {
