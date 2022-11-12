@@ -3,7 +3,8 @@
     "description": "Grant access to tinyfilemanager procedures",
     "read": {
       "file": {
-        "/usr/libexec/tinyfilemanager-update": [ "exec" ]
+        "/usr/libexec/tinyfilemanager-update": [ "exec" ],
+        "/etc/init.d/tinyfilemanager": [ "exec" ]
       },
       "uci": [ "tinyfilemanager" ]
     },

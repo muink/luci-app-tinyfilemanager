@@ -120,6 +120,34 @@ return view.extend({
 		o.rmempty = false;
 		o.depends('proxy_enabled', '1');
 
+		o = s.option(form.Button, '_check_update', _('Check update'));
+		o.inputtitle = _('Check update');
+		o.inputstyle = 'apply';
+		o.onclick = function() {
+			window.setTimeout(function() {
+				window.location = window.location.href.split('#')[0];
+			}, L.env.apply_display * 1000);
+
+			return fs.exec('/etc/init.d/tinyfilemanager', ['check'])
+				.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
+		};
+
+//		s = m.section(form.TypedSection, '_updater');
+//		s.render = L.bind(function(view, section_id) {
+//			return  E('div',{ 'class': 'cbi-section' }, [
+//						E('button', {
+//							'class': 'cbi-button cbi-button-action',
+//							'click': ui.createHandlerFn(view, 'handleQueryVendor')
+//						}, _('Check update')),
+//
+//						E('select', { 'class': 'cbi-input-select' }, [
+//							E('option', { 'value': '2.4.7' }, '2.4.7'),
+//							E('option', { 'value': '2.4.3' }, '2.4.3'),
+//							E('option', { 'value': '2.4.1' }, '2.4.1')
+//						])
+//			]);
+//		}, o, this);
+
 		return m.render();
 	}
 });
