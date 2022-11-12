@@ -9,7 +9,7 @@
 # PKGInfo
 REPOURL='https://github.com/prasathmani/tinyfilemanager'
 PKGNAME='tinyfilemanager'
-VERSION="$1"; VERSION="${VERSION:=2.4.7}"
+VERSION='2.4.7'
 #
 PKG_DIR=$PKGNAME-$VERSION
 #
@@ -87,3 +87,6 @@ mv -f "$PKG_DIR/$INDEXPHP" ./index.php
 mv -f "$PKG_DIR/$CFGSAMPl" .
 mv -f "$PKG_DIR/$LANGFILE" .
 rm -rf "$PKG_DIR"
+
+sed -Ei "/^VERSION=/{s|(VERSION:=)[^\}]*|\1$VERSION|}" "$PROJDIR/root/usr/libexec/tinyfilemanager-update"
+sed -Ei "s|(VERSION=).*|\1'$VERSION'|" "$PROJDIR/root/etc/init.d/tinyfilemanager"
