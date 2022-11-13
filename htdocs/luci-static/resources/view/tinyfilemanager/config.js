@@ -142,6 +142,15 @@ return view.extend({
 			for (var i = 0; i < (releaseslist.length -1); i++)
 				o.value(releaseslist[i]);
 			o.write = function() {};
+
+			o = s.option(form.Button, '_uprgade', _('Uprgade ') + _('Tiny File Manager'));
+			o.inputtitle = _('Uprgade');
+			o.inputstyle = 'apply';
+			o.onclick = L.bind(function(ev, section_id) {
+				var releasestag=document.getElementById('widget.' + o.cbid(section_id).match(/.+\./) + '_releaseslist').value;
+				//alert(releasestag);
+				return fs.exec('/usr/libexec/tinyfilemanager-update', [releasestag]);
+			}, this)
 		};
 
 //		s = m.section(form.TypedSection, '_updater');

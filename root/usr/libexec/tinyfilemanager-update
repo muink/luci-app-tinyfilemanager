@@ -87,6 +87,8 @@ sed -Ei "s,^(.+=\")(http(s)?://)(.+\.(css|js))(\".+),\1$REF_DIR/\4\6," /tmp/$PKG
 mv -f /tmp/$PKG_DIR/$INDEXPHP ./index.php
 mv -f /tmp/$PKG_DIR/$CFGSAMPl .
 mv -f /tmp/$PKG_DIR/$LANGFILE .
+find * -type d -exec chmod 755 {} \;
+find * -type f -exec chmod 644 {} \;
 [ ! -d /www/tinyfilemanager/rootfs ] && ln -s / /www/tinyfilemanager/rootfs
 /etc/init.d/tinyfilemanager start
 
