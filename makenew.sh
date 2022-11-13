@@ -90,3 +90,4 @@ rm -rf "$PKG_DIR"
 
 sed -Ei "/^VERSION=/{s|(VERSION:=)[^\}]*|\1$VERSION|}" "$PROJDIR/root/usr/libexec/tinyfilemanager-update"
 sed -Ei "s|(VERSION=).*|\1'$VERSION'|" "$PROJDIR/root/etc/init.d/tinyfilemanager"
+sed -Ei "s|(pkgversion =).*|\1 '$VERSION';|" "$PROJDIR/htdocs/luci-static/resources/view/tinyfilemanager/config.js"

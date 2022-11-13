@@ -4,7 +4,8 @@
     "read": {
       "file": {
         "/usr/libexec/tinyfilemanager-update": [ "exec" ],
-        "/etc/init.d/tinyfilemanager": [ "exec" ]
+        "/etc/init.d/tinyfilemanager": [ "exec" ],
+        "/var/tinyfilemanager/releaseslist": [ "read" ]
       },
       "uci": [ "tinyfilemanager" ]
     },

@@ -12,12 +12,15 @@ return view.extend({
 
 	load: function() {
 	return Promise.all([
+		L.resolveDefault(fs.read('/var/tinyfilemanager/releaseslist'), null),
 		L.resolveDefault(fs.stat('/usr/libexec/tinyfilemanager-update'), {}),
 		uci.load('tinyfilemanager'),
 	]);
 	},
 
 	render: function(res) {
+		var releaseslist = res[0] ? res[0].split("\n") : [],
+			pkgversion = '2.4.7';
 
 		var m, s, o;
 
@@ -130,6 +133,15 @@ return view.extend({
 
 			return fs.exec('/etc/init.d/tinyfilemanager', ['check'])
 				.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
+		};
+
+		if (releaseslist.length) {
+			o = s.option(form.ListValue, '_releaseslist', _('Releases list'));
+			//o.value(pkgversion);
+			o.default = pkgversion;
+			for (var i = 0; i < (releaseslist.length -1); i++)
+				o.value(releaseslist[i]);
+			o.write = function() {};
 		};
 
 //		s = m.section(form.TypedSection, '_updater');
