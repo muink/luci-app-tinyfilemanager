@@ -59,7 +59,11 @@ make menuconfig
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 # Get Makefile
-git clone --depth 1 --branch master --single-branch https://github.com/muink/luci-app-tinyfilemanager.git package/luci-app-tinyfilemanager
+git clone --depth 1 --branch master --single-branch --no-checkout https://github.com/muink/luci-app-tinyfilemanager.git package/luci-app-tinyfilemanager
+pushd package/luci-app-tinyfilemanager
+umask 022
+git checkout
+popd
 # Select the package LuCI -> Applications -> luci-app-tinyfilemanager
 make menuconfig
 # Upgrade to new version Tiny File Manager (optional)
