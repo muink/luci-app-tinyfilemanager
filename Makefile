@@ -30,6 +30,7 @@ sed -Ei "s|^(post_max_size) *=.*$$|\1 = $$total_size_limit|; \
          s|^(upload_max_filesize) *=.*$$|\1 = $$single_size_limit|; \
          s|^(max_file_uploads) *=.*$$|\1 = $$otime_uploads_limit|" \
 /etc/php.ini
+/etc/init.d/tinyfilemanager start
 endef
 
 define Package/$(LUCI_NAME)/prerm
