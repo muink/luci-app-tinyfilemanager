@@ -30,6 +30,10 @@ sed -Ei "s|^(post_max_size) *=.*$$|\1 = $$total_size_limit|; \
          s|^(upload_max_filesize) *=.*$$|\1 = $$single_size_limit|; \
          s|^(max_file_uploads) *=.*$$|\1 = $$otime_uploads_limit|" \
 /etc/php.ini
+# unpack
+tar -o -C '/www/tinyfilemanager' -xzvf '/www/tinyfilemanager/index.tgz'
+rm -f '/www/tinyfilemanager/index.tgz'
+# start service
 /etc/init.d/tinyfilemanager start
 endef
 

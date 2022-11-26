@@ -92,7 +92,9 @@ mv -f "$PKG_DIR/$INDEXPHP" ./index.php
 mv -f "$PKG_DIR/$LANGFILE" .
 rm -rf "$PKG_DIR"
 
+# Package
 sed -Ei "/^VERSION=/{s|(VERSION:=)[^\}]*|\1$VERSION|}" "$PROJDIR/root/usr/libexec/tinyfilemanager-update"
 sed -Ei "s|(VERSION=).*|\1'$VERSION'|" "$PROJDIR/root/etc/init.d/tinyfilemanager"
 sed -Ei "s|(pkgversion =).*|\1 '$VERSION';|" "$PROJDIR/htdocs/luci-static/resources/view/tinyfilemanager/config.js"
 sed -Ei "s|(PKG_VERSION:=)[^-]+|\1$VERSION|" "$PROJDIR/Makefile"
+tar -czvf index.tgz * --owner=root --remove-files
