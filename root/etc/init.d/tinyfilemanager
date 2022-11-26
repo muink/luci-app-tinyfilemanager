@@ -26,6 +26,13 @@ fi
 
 
 init_config() {
+	sed -n '/\/\/ --- EDIT BELOW CONFIGURATION CAREFULLY ---/,/\/\/ --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---/{ \
+		s|// --- EDIT BELOW CONFIGURATION CAREFULLY ---|\<?php|; \
+		s|// --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---|?\>|; \
+		/\/\/ if User has the customized config file, try to use it to override the default config above/,/^}/d; \
+		p \
+	}' "$WORKDIR/index.php" > "$1"
+
 	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/$HOMEPATH';|; \
 			 s|(^\\\$root_url =)(.+)|\1 '$HOMEPATH';|; \
 
@@ -65,8 +72,7 @@ fi
 
 start_service() {
 	mkdir $VARDIR 2>/dev/null
-	cp -f "$WORKDIR/config-sample.php" "$VARDIR/config.php"
-	rm -rf "$WORKDIR/config.php"
+	touch "$VARDIR/config.php"
 	ln -s "$VARDIR/config.php" "$WORKDIR/config.php" 2>/dev/null
 	init_config "$VARDIR/config.php"
 
