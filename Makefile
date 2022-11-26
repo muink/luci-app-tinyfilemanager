@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_NAME:=luci-app-tinyfilemanager
-PKG_VERSION:=2.4.7-20221119
+PKG_VERSION:=2.5.0-20221119
 #PKG_RELEASE:=1
 
 LUCI_TITLE:=LuCI Tiny File Manager

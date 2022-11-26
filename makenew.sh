@@ -9,12 +9,12 @@
 # PKGInfo
 REPOURL='https://github.com/prasathmani/tinyfilemanager'
 PKGNAME='tinyfilemanager'
-VERSION='2.4.7'
+VERSION='2.5.0'
 #
 PKG_DIR=$PKGNAME-$VERSION
 #
 INDEXPHP="tinyfilemanager.php"
-CFGSAMPl="config-sample.php"
+#CFGSAMPl="config-sample.php"
 LANGFILE="translation.json"
 
 # Constants
@@ -76,15 +76,15 @@ done
 
 # Post-processing
 sed -i "s|\$FM_HIGHLIGHTJS_STYLE|<?php echo FM_HIGHLIGHTJS_STYLE ?>|g" "$PKG_DIR/$INDEXPHP"
-mv "$WORKDIR/js/bootstrap.min.js~" "$WORKDIR/js/bootstrap.slim.min.js"
-sed -i "/jquery.slim.min.js/,/}/ {s|bootstrap.min.js|bootstrap.slim.min.js|}" "$PKG_DIR/$INDEXPHP"
+#mv "$WORKDIR/js/bootstrap.min.js~" "$WORKDIR/js/bootstrap.slim.min.js"
+#sed -i "/jquery.slim.min.js/,/}/ {s|bootstrap.min.js|bootstrap.slim.min.js|}" "$PKG_DIR/$INDEXPHP"
 
 # Migrating to Local Reference
 sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1\5/\4\6," "$PKG_DIR/$INDEXPHP"
 
 # Clean up and Done
 mv -f "$PKG_DIR/$INDEXPHP" ./index.php
-mv -f "$PKG_DIR/$CFGSAMPl" .
+#mv -f "$PKG_DIR/$CFGSAMPl" .
 mv -f "$PKG_DIR/$LANGFILE" .
 rm -rf "$PKG_DIR"
 
