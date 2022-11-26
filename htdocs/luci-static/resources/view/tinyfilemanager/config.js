@@ -19,7 +19,7 @@ return view.extend({
 	},
 
 	render: function(res) {
-		var releaseslist = res[0] ? res[0].split("\n") : [],
+		var releaseslist = res[0] ? res[0].trim().split("\n") : [],
 			pkgversion = '2.5.0';
 
 		var m, s, o;
@@ -139,7 +139,7 @@ return view.extend({
 			o = s.option(form.ListValue, '_releaseslist', _('Releases list'));
 			//o.value(pkgversion);
 			o.default = pkgversion;
-			for (var i = 0; i < (releaseslist.length -1); i++)
+			for (var i = 0; i < releaseslist.length; i++)
 				o.value(releaseslist[i]);
 			o.write = function() {};
 

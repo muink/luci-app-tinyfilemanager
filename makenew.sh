@@ -17,9 +17,6 @@ INDEXPHP="tinyfilemanager.php"
 #CFGSAMPl="config-sample.php"
 LANGFILE="translation.json"
 
-# Constants
-FM_HIGHLIGHTJS_STYLE='vs' # tinyfilemanager.php#L51; tinyfilemanager.php#L417
-
 
 PROJDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" # <--
 WORKDIR="$PROJDIR/htdocs/$PKGNAME" # <--
@@ -35,6 +32,7 @@ rm -rf *
 curl -L ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C "$WORKDIR"
 
 # Preprocessing
+FM_HIGHLIGHTJS_STYLE=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PKG_DIR/$INDEXPHP")
 sed -i "s|<?php echo FM_HIGHLIGHTJS_STYLE ?>|\$FM_HIGHLIGHTJS_STYLE|g" "$PKG_DIR/$INDEXPHP"
 
 # Download CDN Used
