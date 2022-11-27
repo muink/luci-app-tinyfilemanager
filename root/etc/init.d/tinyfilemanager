@@ -71,13 +71,13 @@ fi
 }
 
 start_service() {
-	mkdir $VARDIR 2>/dev/null
-	touch "$VARDIR/config.php"
-	ln -s "$VARDIR/config.php" "$WORKDIR/config.php" 2>/dev/null
-	init_config "$VARDIR/config.php"
+	mkdir /var/etc 2>/dev/null
+	touch "/var/etc/tinyfilemanager.conf"
+	ln -s "/var/etc/tinyfilemanager.conf" "$WORKDIR/config.php" 2>/dev/null
+	init_config "/var/etc/tinyfilemanager.conf"
 
 	config_load "$CONFIG_NAME"
-	config_foreach apply_config "$TYPEDSECTION" "$VARDIR/config.php"
+	config_foreach apply_config "$TYPEDSECTION" "/var/etc/tinyfilemanager.conf"
 }
 
 service_triggers() {
