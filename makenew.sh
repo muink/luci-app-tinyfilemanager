@@ -78,8 +78,7 @@ sed -i "s|\$FM_HIGHLIGHTJS_STYLE|<?php echo FM_HIGHLIGHTJS_STYLE ?>|g" "$PKG_DIR
 #sed -i "/jquery.slim.min.js/,/}/ {s|bootstrap.min.js|bootstrap.slim.min.js|}" "$PKG_DIR/$INDEXPHP"
 sed -Ei "/<link rel=\"(preconnect|dns-prefetch)\"/d" "$PKG_DIR/$INDEXPHP"
 
-# Fix
-sed -Ei "/^\/\/ Auth/,/^}/{/\/\/ Logging In/,/\/\/ Form/{s|(fm_redirect\()FM_ROOT_URL \. |\1|g}}" "$PKG_DIR/$INDEXPHP"
+# Hotfix
 
 # Migrating to Local Reference
 sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1\5/\4\6," "$PKG_DIR/$INDEXPHP"
