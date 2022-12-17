@@ -5,6 +5,7 @@
       "file": {
         "/usr/libexec/tinyfilemanager-update": [ "exec" ],
         "/etc/init.d/tinyfilemanager check": [ "exec" ],
+        "/etc/init.d/tinyfilemanager restart": [ "exec" ],
         "/var/tinyfilemanager/releaseslist": [ "read" ]
       },
       "uci": [ "tinyfilemanager" ]
