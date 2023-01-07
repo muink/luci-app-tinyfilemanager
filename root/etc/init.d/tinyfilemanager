@@ -65,7 +65,7 @@ sed -Ei "s|(^\\\$favicon_path =)(.+)|\1 '$favicon_path';|" "$2"
 if [ "$online_viewer" == "0" ]; then sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 false;|" "$2"
 else sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 '$online_viewer';|" "$2"
 fi
-if [ "$[ $max_upload_size +0 ]" == "0" ]; then sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 26214400;|" "$2" #25M
+if [ "$(( $max_upload_size +0 ))" == "0" ]; then sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 26214400;|" "$2" #25M
 else sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 $(( $max_upload_size * 1024**2 ));|" "$2"
 fi
 }
