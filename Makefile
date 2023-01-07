@@ -31,7 +31,7 @@ sed -Ei "s|^(post_max_size) *=.*$$|\1 = $$total_size_limit|; \
          s|^(max_file_uploads) *=.*$$|\1 = $$otime_uploads_limit|" \
 /etc/php.ini
 # unpack
-tar --no-same-owner -C '/www/tinyfilemanager' -xzf '/www/tinyfilemanager/index.tgz'
+busybox tar -C '/www/tinyfilemanager' -xzf '/www/tinyfilemanager/index.tgz'
 rm -f '/www/tinyfilemanager/index.tgz'
 # 
 /etc/init.d/rpcd reload
