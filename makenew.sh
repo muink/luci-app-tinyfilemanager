@@ -95,4 +95,4 @@ sed -Ei "/^VERSION=/{s|(VERSION:=)[^\}]*|\1$VERSION|}" "$PROJDIR/root/usr/libexe
 sed -Ei "s|(VERSION=).*|\1'$VERSION'|" "$PROJDIR/root/etc/init.d/tinyfilemanager"
 sed -Ei "s|(pkgversion =).*|\1 '$VERSION';|" "$PROJDIR/htdocs/luci-static/resources/view/tinyfilemanager/config.js"
 sed -Ei "s|(PKG_VERSION:=)[^-]+|\1$VERSION|" "$PROJDIR/Makefile"
-tar -czvf index.tgz * --owner=root --remove-files
+tar -czvf index.tgz * --owner=0 --group=0 --remove-files
