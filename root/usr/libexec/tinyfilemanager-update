@@ -23,8 +23,8 @@ WORKDIR="/www/$PKGNAME"
 mkdir -p "$WORKDIR" 2>/dev/null
 cd $WORKDIR
 
-if [ "$(uci get $PKGNAME.@main[0].proxy_enabled 2>/dev/null)" == "1" ]; then
-    export ALL_PROXY=$(uci get $PKGNAME.@main[0].proxy_protocol 2>/dev/null)://$(uci get $PKGNAME.@main[0].proxy_server 2>/dev/null)
+if [ "$(uci -q get $PKGNAME.@main[0].proxy_enabled)" == "1" ]; then
+    export ALL_PROXY=$(uci -q get $PKGNAME.@main[0].proxy_protocol)://$(uci -q get $PKGNAME.@main[0].proxy_server)
 fi
 
 

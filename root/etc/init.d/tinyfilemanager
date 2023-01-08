@@ -19,8 +19,8 @@ VARDIR="/var/tinyfilemanager"
 
 HOMEPATH="tinyfilemanager/rootfs"
 
-if [ "$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_enabled 2>/dev/null)" == "1" ]; then
-    export ALL_PROXY=$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_protocol 2>/dev/null)://$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_server 2>/dev/null)
+if [ "$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_enabled)" == "1" ]; then
+    export ALL_PROXY=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_protocol)://$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_server)
 fi
 
 
@@ -36,7 +36,7 @@ init_config() {
 	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/$HOMEPATH';|; \
 			 s|(^\\\$root_url =)(.+)|\1 '$HOMEPATH';|; \
 
-			 s|(^\\\$default_timezone =)(.+)|\1 '$(uci get system.@system[0].zonename)';| \
+			 s|(^\\\$default_timezone =)(.+)|\1 '$(uci -q get system.@system[0].zonename)';| \
 	" "$1"
 }
 
@@ -46,14 +46,14 @@ apply_config() {
 	for _var in $ucivv; do
 		eval "local $_var=\$(config_get $1 $_var 2>/dev/null)"
 	done
-	local auth_users=$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].auth_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|:|' => '|g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
-	local readonly_users=$(uci get $CONFIG_NAME.@$TYPEDSECTION[0].readonly_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+	local auth_users=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].auth_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|:|' => '|g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+	local readonly_users=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].readonly_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
 
 
 [ "$use_auth" -eq "1" ] && sed -Ei "s|(^\\\$use_auth =)(.+)|\1 true;|" "$2" || sed -Ei "s|(^\\\$use_auth =)(.+)|\1 false;|" "$2"
 sed -Ei "/^\\\$auth_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$auth_users /a\ $auth_users" "$2"
 sed -Ei "/^\\\$readonly_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$readonly_users /a\ $readonly_users" "$2"
-sed -Ei "s|(^\\\$default_timezone =)(.+)|\1 '$(uci get system.@system[0].zonename)';|" "$2"
+sed -Ei "s|(^\\\$default_timezone =)(.+)|\1 '$(uci -q get system.@system[0].zonename)';|" "$2"
 if [ -n "$root_path" ]; then
 	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/${HOMEPATH}$root_path';|; \
 			 s|(^\\\$root_url =)(.+)|\1 '${HOMEPATH}$root_path';| \

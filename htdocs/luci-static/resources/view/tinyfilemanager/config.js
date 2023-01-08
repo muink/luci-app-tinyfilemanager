@@ -121,15 +121,18 @@ return view.extend({
 		o.value('http', 'HTTP');
 		o.value('https', 'HTTPS');
 		o.value('socks5', 'SOCKS5');
+		o.value('socks5h', 'SOCKS5H');
 		o.default = 'socks5';
 		o.rmempty = false;
 		o.depends('proxy_enabled', '1');
+		o.retain = true;
 
 		o = s.option(form.Value, 'proxy_server', _('Proxy Server'));
 		o.datatype = "ipaddrport(1)";
 		o.placeholder = '192.168.1.10:1080';
 		o.rmempty = false;
 		o.depends('proxy_enabled', '1');
+		o.retain = true;
 
 		o = s.option(form.Button, '_check_update', _('Check update'));
 		o.inputtitle = _('Check update');
