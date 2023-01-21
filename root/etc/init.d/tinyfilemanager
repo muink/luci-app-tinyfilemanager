@@ -97,7 +97,3 @@ check() {
 restart() {
 	start
 }
-
-boot() {
-	start
-}
