@@ -158,7 +158,7 @@ return view.extend({
 			o.inputtitle = _('Uprgade');
 			o.inputstyle = 'apply';
 			o.onclick = L.bind(function(ev, section_id) {
-				var releasestag=document.getElementById('widget.' + o.cbid(section_id).match(/.+\./) + '_releaseslist').value;
+				var releasestag=document.getElementById('widget.' + this.cbid(section_id).match(/.+\./) + '_releaseslist').value;
 				//alert(releasestag);
 				return fs.exec('/usr/libexec/tinyfilemanager-update', [releasestag])
 					.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
