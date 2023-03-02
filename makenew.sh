@@ -32,11 +32,12 @@ rm -rf *
 curl -L ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C "$WORKDIR"
 
 # Preprocessing
-FM_HIGHLIGHTJS_STYLE=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PKG_DIR/$INDEXPHP")
-sed -i "s|<?php echo FM_HIGHLIGHTJS_STYLE ?>|\$FM_HIGHLIGHTJS_STYLE|g" "$PKG_DIR/$INDEXPHP"
+sed -Ei "/<link rel=\"(preconnect|dns-prefetch)\"/d" "$PKG_DIR/$INDEXPHP"
+__highlightjs_style=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PKG_DIR/$INDEXPHP")
+sed -i "s|' . \$highlightjs_style . '|\$__highlightjs_style|" "$PKG_DIR/$INDEXPHP"
 
 # Download CDN Used
-refurl=($(sed -En "s,^.+=\"(http(s)?://.+\.(css|js))\".+,\1, p" "$PKG_DIR/$INDEXPHP" | sort -u ))
+refurl=($(sed -En "/^\\\$external /,/^\);/{s,^.+=\"(http(s)?://.+\.(css|js))\".+,\1, p}" "$PKG_DIR/$INDEXPHP" | sort -u ))
 ref=
 url=
 out=
@@ -73,10 +74,7 @@ for _i in $ref; do
 done
 
 # Post-processing
-sed -i "s|\$FM_HIGHLIGHTJS_STYLE|<?php echo FM_HIGHLIGHTJS_STYLE ?>|g" "$PKG_DIR/$INDEXPHP"
-#mv "$WORKDIR/js/bootstrap.min.js~" "$WORKDIR/js/bootstrap.slim.min.js"
-#sed -i "/jquery.slim.min.js/,/}/ {s|bootstrap.min.js|bootstrap.slim.min.js|}" "$PKG_DIR/$INDEXPHP"
-sed -Ei "/<link rel=\"(preconnect|dns-prefetch)\"/d" "$PKG_DIR/$INDEXPHP"
+sed -i "s|\$__highlightjs_style|' . \$highlightjs_style . '|" "$PKG_DIR/$INDEXPHP"
 
 # Hotfix
 
