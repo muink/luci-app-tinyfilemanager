@@ -9,7 +9,7 @@
 # PKGInfo
 REPOURL='https://github.com/prasathmani/tinyfilemanager'
 PKGNAME='tinyfilemanager'
-VERSION='2.5.0'
+VERSION='2.5.3'
 #
 PKG_DIR=$PKGNAME-$VERSION
 REF_DIR="assets"

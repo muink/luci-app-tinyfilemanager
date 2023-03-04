@@ -20,7 +20,7 @@ return view.extend({
 
 	render: function(res) {
 		var releaseslist = res[0] ? res[0].trim().split("\n") : [],
-			pkgversion = '2.5.0';
+			pkgversion = '2.5.3';
 
 		var m, s, o;
 
