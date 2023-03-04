@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-12-17 12:15+0000\n"
+"PO-Revision-Date: 2023-03-04 19:01+0100\n"
 "Last-Translator: muink <hukk1996@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstinyfilemanager/zh_Hans/>\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.12.1-dev\n"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:134
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:135
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:146
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:147
 msgid "Check update"
 msgstr "检查更新"
 
@@ -21,35 +21,35 @@ msgstr "检查更新"
 msgid "Config"
 msgstr "配置"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:72
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:76
 msgid "D-M-YYYY"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:71
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:75
 msgid "D.M.YYYY"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:73
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:77
 msgid "D/M/YYYY"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:69
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:73
 msgid "DD-MM-YYYY"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:68
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:72
 msgid "DD.MM.YYYY"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:70
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:74
 msgid "DD/MM/YYYY"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:67
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:71
 msgid "Date format"
 msgstr "日期格式"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:105
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:114
 msgid "Disable"
 msgstr ""
 
@@ -57,15 +57,23 @@ msgstr ""
 msgid "Enable Authentication"
 msgstr "启用用户验证"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:117
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:126
 msgid "Enable proxy for updater"
 msgstr "为更新器启用代理"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:97
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:107
+msgid "Exclude Files/Folders"
+msgstr "排除 文件/目录"
+
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:101
 msgid "Favicon path"
 msgstr "Favicon 路径"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:106
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:61
+msgid "Global Readonly"
+msgstr "全局只读"
+
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:115
 msgid "Google Docs"
 msgstr ""
 
@@ -73,15 +81,15 @@ msgstr ""
 msgid "Grant access to tinyfilemanager procedures"
 msgstr "授予访问 LuCI 应用 tinyfilemanager 的权限"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:85
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:89
 msgid "H:mm:ss"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:84
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:88
 msgid "HH:mm:ss"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:61
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:65
 msgid "Home path"
 msgstr "家目录"
 
@@ -89,11 +97,11 @@ msgstr "家目录"
 msgid "Login user name and passwd hash"
 msgstr "登入用户名和密码哈希"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:111
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:120
 msgid "Max upload size (MBytes)"
 msgstr "上传大小限制 (MBytes)"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:107
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:116
 msgid "Microsoft Web Apps"
 msgstr ""
 
@@ -101,15 +109,15 @@ msgstr ""
 msgid "NAS"
 msgstr "存储"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:103
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:112
 msgid "Online Docs viewer"
 msgstr "在线文档预览器"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:120
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:129
 msgid "Proxy Protocol"
 msgstr "代理协议"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:128
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:139
 msgid "Proxy Server"
 msgstr "代理服务器"
 
@@ -117,11 +125,11 @@ msgstr "代理服务器"
 msgid "Readonly users"
 msgstr "只读用户组"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:147
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:159
 msgid "Releases list"
 msgstr "发布版列表"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:104
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:113
 msgid "Requires running on open network"
 msgstr "需要运行在开放网络"
 
@@ -130,54 +138,54 @@ msgstr "需要运行在开放网络"
 msgid "Restart"
 msgstr "重启"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:93
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:97
 msgid "Show seconds in time"
 msgstr "显示秒"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:87
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:91
 msgid "TT h:mm:ss"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:86
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:90
 msgid "TT hh:mm:ss"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:83
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:87
 msgid "Time format"
 msgstr "时间格式"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:154
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:166
 #: applications/luci-app-tinyfilemanager/root/usr/share/luci/menu.d/luci-app-tinyfilemanager.json:11
 #: applications/luci-app-tinyfilemanager/root/usr/share/luci/menu.d/luci-app-tinyfilemanager.json:22
 msgid "Tiny File Manager"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:154
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:155
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:166
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:167
 msgid "Uprgade"
 msgstr "升级"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:78
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:82
 msgid "YYYY-M-D"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:75
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:79
 msgid "YYYY-MM-DD"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:77
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:81
 msgid "YYYY.M.D"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:74
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:78
 msgid "YYYY.MM.DD"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:79
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:83
 msgid "YYYY/M/D"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:76
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:80
 msgid "YYYY/MM/DD"
 msgstr ""
 
@@ -189,10 +197,10 @@ msgstr ""
 "你可以在 <b>文件管理器 -> Admin -> 帮助 -> 生成新的</b> or <a href=\"%s\"><b>"
 "这里</b></a>。"
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:89
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:93
 msgid "h:mm:ss TT"
 msgstr ""
 
-#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:88
+#: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:92
 msgid "hh:mm:ss TT"
 msgstr ""
