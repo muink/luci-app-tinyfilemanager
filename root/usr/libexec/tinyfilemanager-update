@@ -12,7 +12,7 @@ PKGNAME='tinyfilemanager'
 VERSION="$1"; VERSION="${VERSION:=2.5.0}"
 #
 PKG_DIR=$PKGNAME-$VERSION
-REF_DIR="vendor"
+REF_DIR="assets"
 #
 INDEXPHP="tinyfilemanager.php"
 #CFGSAMPl="config-sample.php"

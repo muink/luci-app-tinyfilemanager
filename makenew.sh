@@ -12,6 +12,7 @@ PKGNAME='tinyfilemanager'
 VERSION='2.5.0'
 #
 PKG_DIR=$PKGNAME-$VERSION
+REF_DIR="assets"
 #
 INDEXPHP="tinyfilemanager.php"
 #CFGSAMPl="config-sample.php"
@@ -37,6 +38,7 @@ __highlightjs_style=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PK
 sed -i "s|' . \$highlightjs_style . '|\$__highlightjs_style|" "$PKG_DIR/$INDEXPHP"
 
 # Download CDN Used
+mkdir -p "$REF_DIR" 2>/dev/null
 refurl=($(sed -En "/^\\\$external /,/^\);/{s,^.+=\"(http(s)?://.+\.(css|js))\".+,\1, p}" "$PKG_DIR/$INDEXPHP" | sort -u ))
 ref=
 url=
@@ -49,8 +51,8 @@ for _i in $(seq 0 1 $[ ${#refurl[@]} -1 ]); do
     type=${url##*.}
 
     curl -Lo $out $url
-    mkdir -p $type 2>/dev/null
-    mv --backup $out $type/
+    mkdir -p "$REF_DIR/$type" 2>/dev/null
+    mv --backup $out "$REF_DIR/$type/"
 done
 
 ref=$(for _p in $(find * -type f ! -path "$PKG_DIR/*"); do \
@@ -67,9 +69,9 @@ for _i in $ref; do
         out=${url%%\?*}
         type=${hosturl##*.}
 
-        mkdir -p "$type/${out%/*}" 2>/dev/null
+        mkdir -p "$REF_DIR/$type/${out%/*}" 2>/dev/null
         curl -Lo ${out##*/} "${hosturl%/*}/$url"
-        mv -f ${out##*/} "$type/$out"
+        mv -f ${out##*/} "$REF_DIR/$type/$out"
     done
 done
 
@@ -79,7 +81,7 @@ sed -i "s|\$__highlightjs_style|' . \$highlightjs_style . '|" "$PKG_DIR/$INDEXPH
 # Hotfix
 
 # Migrating to Local Reference
-sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1\5/\4\6," "$PKG_DIR/$INDEXPHP"
+sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1$REF_DIR/\5/\4\6," "$PKG_DIR/$INDEXPHP"
 
 # Clean up and Done
 mv -f "$PKG_DIR/$INDEXPHP" ./index.php
