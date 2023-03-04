@@ -32,6 +32,9 @@ rm -rf *
 # Download Repository
 curl -L ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C "$WORKDIR"
 
+# Check offline ?
+[ -n "$(sed -En "/^\\\$external = array\(/,/^\);/{s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\4,p}" "$PKG_DIR/$INDEXPHP")" ] && {
+
 # Preprocessing
 sed -Ei "/<link rel=\"(preconnect|dns-prefetch)\"/d" "$PKG_DIR/$INDEXPHP"
 __highlightjs_style=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PKG_DIR/$INDEXPHP")
@@ -83,7 +86,10 @@ sed -i "s|\$__highlightjs_style|' . \$highlightjs_style . '|" "$PKG_DIR/$INDEXPH
 # Migrating to Local Reference
 sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1$REF_DIR/\5/\4\6," "$PKG_DIR/$INDEXPHP"
 
+}
+
 # Clean up and Done
+[ -d "$PKG_DIR/$REF_DIR" ] && cp -rf "$PKG_DIR/$REF_DIR" .
 mv -f "$PKG_DIR/$INDEXPHP" ./index.php
 #mv -f "$PKG_DIR/$CFGSAMPl" .
 mv -f "$PKG_DIR/$LANGFILE" .
