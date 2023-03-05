@@ -29,7 +29,7 @@ init_config() {
 	sed -n '/\/\/ --- EDIT BELOW CONFIGURATION CAREFULLY ---/,/\/\/ --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---/{ \
 		s|// --- EDIT BELOW CONFIGURATION CAREFULLY ---|\<?php|; \
 		s|// --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---|?\>|; \
-		/\/\/ if User has the customized config file, try to use it to override the default config above/,/^}/d; \
+		/\/\/ if User has the external config file, try to use it to override the default config above/,/^}/d; \
 		p \
 	}' "$WORKDIR/index.php" > "$1"
 
@@ -41,7 +41,7 @@ init_config() {
 }
 
 apply_config() {
-	local ucivv="use_auth root_path date_format time_format show_second favicon_path online_viewer max_upload_size"
+	local ucivv="use_auth global_readonly root_path date_format time_format show_second favicon_path online_viewer max_upload_size"
 
 	for _var in $ucivv; do
 		eval "local $_var=\$(config_get $1 $_var 2>/dev/null)"
@@ -49,10 +49,14 @@ apply_config() {
 	local auth_users=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].auth_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|:|' => '|g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
 	local readonly_users=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].readonly_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
 
+	local exclude_items=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].exclude_items|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+
 
 [ "$use_auth" -eq "1" ] && sed -Ei "s|(^\\\$use_auth =)(.+)|\1 true;|" "$2" || sed -Ei "s|(^\\\$use_auth =)(.+)|\1 false;|" "$2"
+[ "$global_readonly" -eq "1" ] && sed -Ei "s|(^\\\$global_readonly =)(.+)|\1 true;|" "$2" || sed -Ei "s|(^\\\$global_readonly =)(.+)|\1 false;|" "$2"
 sed -Ei "/^\\\$auth_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$auth_users /a\ $auth_users" "$2"
 sed -Ei "/^\\\$readonly_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$readonly_users /a\ $readonly_users" "$2"
+sed -Ei "/^\\\$exclude_items /{s|array\(\);|array(\n);|}" "$2" && sed -Ei "/^\\\$exclude_items /a\ $exclude_items" "$2"
 sed -Ei "s|(^\\\$default_timezone =)(.+)|\1 '$(uci -q get system.@system[0].zonename)';|" "$2"
 if [ -n "$root_path" ]; then
 	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/${HOMEPATH}$root_path';|; \

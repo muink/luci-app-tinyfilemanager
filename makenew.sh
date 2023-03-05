@@ -12,6 +12,7 @@ PKGNAME='tinyfilemanager'
 VERSION='2.5.0'
 #
 PKG_DIR=$PKGNAME-$VERSION
+REF_DIR="assets"
 #
 INDEXPHP="tinyfilemanager.php"
 #CFGSAMPl="config-sample.php"
@@ -31,12 +32,17 @@ rm -rf *
 # Download Repository
 curl -L ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C "$WORKDIR"
 
+# Check offline ?
+[ -n "$(sed -En "/^\\\$external = array\(/,/^\);/{s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\4,p}" "$PKG_DIR/$INDEXPHP")" ] && {
+
 # Preprocessing
-FM_HIGHLIGHTJS_STYLE=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PKG_DIR/$INDEXPHP")
-sed -i "s|<?php echo FM_HIGHLIGHTJS_STYLE ?>|\$FM_HIGHLIGHTJS_STYLE|g" "$PKG_DIR/$INDEXPHP"
+sed -Ei "/<link rel=\"(preconnect|dns-prefetch)\"/d" "$PKG_DIR/$INDEXPHP"
+__highlightjs_style=$(sed -En "s|^\\\$highlightjs_style = *'([^']*)';|\1|p" "$PKG_DIR/$INDEXPHP")
+sed -i "s|' . \$highlightjs_style . '|\$__highlightjs_style|" "$PKG_DIR/$INDEXPHP"
 
 # Download CDN Used
-refurl=($(sed -En "s,^.+=\"(http(s)?://.+\.(css|js))\".+,\1, p" "$PKG_DIR/$INDEXPHP" | sort -u ))
+mkdir -p "$REF_DIR" 2>/dev/null
+refurl=($(sed -En "/^\\\$external /,/^\);/{s,^.+=\"(http(s)?://.+\.(css|js))\".+,\1, p}" "$PKG_DIR/$INDEXPHP" | sort -u ))
 ref=
 url=
 out=
@@ -48,8 +54,8 @@ for _i in $(seq 0 1 $[ ${#refurl[@]} -1 ]); do
     type=${url##*.}
 
     curl -Lo $out $url
-    mkdir -p $type 2>/dev/null
-    mv --backup $out $type/
+    mkdir -p "$REF_DIR/$type" 2>/dev/null
+    mv --backup $out "$REF_DIR/$type/"
 done
 
 ref=$(for _p in $(find * -type f ! -path "$PKG_DIR/*"); do \
@@ -66,25 +72,27 @@ for _i in $ref; do
         out=${url%%\?*}
         type=${hosturl##*.}
 
-        mkdir -p "$type/${out%/*}" 2>/dev/null
+        mkdir -p "$REF_DIR/$type/${out%/*}" 2>/dev/null
         curl -Lo ${out##*/} "${hosturl%/*}/$url"
-        mv -f ${out##*/} "$type/$out"
+        mv -f ${out##*/} "$REF_DIR/$type/$out"
     done
 done
 
 # Post-processing
-sed -i "s|\$FM_HIGHLIGHTJS_STYLE|<?php echo FM_HIGHLIGHTJS_STYLE ?>|g" "$PKG_DIR/$INDEXPHP"
-#mv "$WORKDIR/js/bootstrap.min.js~" "$WORKDIR/js/bootstrap.slim.min.js"
-#sed -i "/jquery.slim.min.js/,/}/ {s|bootstrap.min.js|bootstrap.slim.min.js|}" "$PKG_DIR/$INDEXPHP"
-sed -Ei "/<link rel=\"(preconnect|dns-prefetch)\"/d" "$PKG_DIR/$INDEXPHP"
+sed -i "s|\$__highlightjs_style|' . \$highlightjs_style . '|" "$PKG_DIR/$INDEXPHP"
 
-# Fix
-sed -Ei "/^\/\/ Auth/,/^}/{/\/\/ Logging In/,/\/\/ Form/{s|(fm_redirect\()FM_ROOT_URL \. |\1|g}}" "$PKG_DIR/$INDEXPHP"
+# Hotfix
 
 # Migrating to Local Reference
-sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1\5/\4\6," "$PKG_DIR/$INDEXPHP"
+sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1$REF_DIR/\5/\4\6," "$PKG_DIR/$INDEXPHP"
+
+}
+
+# FixED
+sed -Ei "/^if \(\\\$use_auth\) \{/,/^}/{/\/\/ Logging In/,/\/\/ Form/{s|(fm_redirect\().+|\1FM_SELF_URL);|g}}" "$PKG_DIR/$INDEXPHP"
 
 # Clean up and Done
+[ -d "$PKG_DIR/$REF_DIR" ] && cp -rf "$PKG_DIR/$REF_DIR" .
 mv -f "$PKG_DIR/$INDEXPHP" ./index.php
 #mv -f "$PKG_DIR/$CFGSAMPl" .
 mv -f "$PKG_DIR/$LANGFILE" .

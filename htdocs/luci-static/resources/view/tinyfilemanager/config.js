@@ -58,6 +58,10 @@ return view.extend({
 		o.rmempty = false;
 		o.depends('use_auth', '1');
 
+		o = s.option(form.Flag, 'global_readonly', _('Global Readonly'));
+		o.default = o.disabled;
+		o.rmempty = false;
+
 		o = s.option(form.Value, 'root_path', _('Home path'));
 		o.datatype = 'directory';
 		o.placeholder = '/var';
@@ -97,6 +101,11 @@ return view.extend({
 		o = s.option(form.Value, 'favicon_path', _('Favicon path'));
 		o.datatype = 'file';
 		o.placeholder = '/etc/tinyfilemanager/favicon.png';
+		o.optional = true;
+		o.rmempty = false;
+
+		o = s.option(form.DynamicList, 'exclude_items', _('Exclude Files/Folders'));
+		o.datatype = "list(string)";
 		o.optional = true;
 		o.rmempty = false;
 
