@@ -88,6 +88,9 @@ sed -Ei "s,^(.+=\")(http(s)?://.+/)([^/]+\.(css|js))(\".+),\1$REF_DIR/\5/\4\6," 
 
 }
 
+# FixED
+sed -Ei "/^if \(\\\$use_auth\) \{/,/^}/{/\/\/ Logging In/,/\/\/ Form/{s|(fm_redirect\().+|\1FM_SELF_URL);|g}}" "$PKG_DIR/$INDEXPHP"
+
 # Clean up and Done
 [ -d "$PKG_DIR/$REF_DIR" ] && cp -rf "$PKG_DIR/$REF_DIR" .
 mv -f "$PKG_DIR/$INDEXPHP" ./index.php
