@@ -171,7 +171,7 @@ return view.extend({
 				//alert(releasestag);
 				return fs.exec('/usr/libexec/tinyfilemanager-update', [releasestag])
 					.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
-			}, this)
+			}, o)
 		};
 
 //		s = m.section(form.TypedSection, '_updater');
