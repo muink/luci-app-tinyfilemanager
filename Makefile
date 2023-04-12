@@ -1,5 +1,5 @@
 # Tiny File Manager by prasathmani <https://tinyfilemanager.github.io>
-# Copyright (C) 2022 muink <https://github.com/muink>
+# Copyright (C) 2022-2023 muink <https://github.com/muink>
 #
 # This is free software, licensed under the GNU General Public License v3.
 # See /LICENSE for more information.
@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_NAME:=luci-app-tinyfilemanager
-PKG_VERSION:=2.5.3-20230305
+PKG_VERSION:=2.5.3-20230413
 #PKG_RELEASE:=1
 
 LUCI_TITLE:=LuCI Tiny File Manager
@@ -21,20 +21,18 @@ endef
 
 define Package/$(LUCI_NAME)/postinst
 #!/bin/sh
-mkdir -p /www/tinyfilemanager 2>/dev/null
-[ ! -d /www/tinyfilemanager/rootfs ] && ln -s / /www/tinyfilemanager/rootfs
+mkdir -p "$${IPKG_INSTROOT}/www/tinyfilemanager" 2>/dev/null
+[ ! -d "$${IPKG_INSTROOT}/www/tinyfilemanager/rootfs" ] && ln -s / "$${IPKG_INSTROOT}/www/tinyfilemanager/rootfs"
 total_size_limit=5G        #post_max_size = 8M
 single_size_limit=2G       #upload_max_filesize = 2M
 otime_uploads_limit=200    #max_file_uploads = 20
 sed -Ei "s|^(post_max_size) *=.*$$|\1 = $$total_size_limit|; \
          s|^(upload_max_filesize) *=.*$$|\1 = $$single_size_limit|; \
          s|^(max_file_uploads) *=.*$$|\1 = $$otime_uploads_limit|" \
-/etc/php.ini
+"$${IPKG_INSTROOT}/etc/php.ini"
 # unpack
-busybox tar -C '/www/tinyfilemanager' -xzf '/www/tinyfilemanager/index.tgz'
-rm -f '/www/tinyfilemanager/index.tgz'
-# 
-/etc/init.d/rpcd reload
+busybox tar -C "$${IPKG_INSTROOT}/www/tinyfilemanager" -xzf "$${IPKG_INSTROOT}/www/tinyfilemanager/index.tgz"
+rm -f "$${IPKG_INSTROOT}/www/tinyfilemanager/index.tgz"
 endef
 
 define Package/$(LUCI_NAME)/prerm
