@@ -16,6 +16,7 @@ TYPEDSECTION='main'
 
 WORKDIR="/www/tinyfilemanager"
 VARDIR="/var/tinyfilemanager"
+CONF="/var/etc/tinyfilemanager.conf"
 
 HOMEPATH="tinyfilemanager/rootfs"
 
@@ -24,6 +25,22 @@ if [ "$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].proxy_enabled)" == "1" ]; then
 fi
 
 
+
+validate_section() {
+	uci_load_validate $CONFIG_NAME $TYPEDSECTION "$1" "$2" \
+		'use_auth:bool:0' \
+		'auth_users:list(string)' \
+		'readonly_users:list(string)' \
+		'global_readonly:bool:0' \
+		'root_path:directory' \
+		'date_format:or("d.m.o", "d-m-o", "d/m/o", "j.n.o", "j-n-o", "j/n/o", "o.m.d", "o-m-d", "o/m/d", "o.n.j", "o-n-j", "o/n/j"):d.m.o' \
+		'time_format:or("H\:i\:s", "G\:i\:s", "A h\:i\:s", "A g\:i\:s", "h\:i\:s A", "g\:i\:s A"):H\:i\:s' \
+		'show_second:bool:0' \
+		'favicon_path:file' \
+		'exclude_items:list(string)' \
+		'online_viewer:or("0", "google", "microsoft"):0' \
+		'max_upload_size:and(uinteger,max(2048))'
+}
 
 init_config() {
 	sed -n '/\/\/ --- EDIT BELOW CONFIGURATION CAREFULLY ---/,/\/\/ --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---/{ \
@@ -41,47 +58,45 @@ init_config() {
 }
 
 apply_config() {
-	local ucivv="use_auth global_readonly root_path date_format time_format show_second favicon_path online_viewer max_upload_size"
+	[ "$2" == "0" ] || { >&2 echo "section $1 validation failed"; return 1; }
 
-	for _var in $ucivv; do
-		eval "local $_var=\$(config_get $1 $_var 2>/dev/null)"
-	done
-	local auth_users=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].auth_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|:|' => '|g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
-	local readonly_users=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].readonly_users|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+	local _conf="$CONF"
 
-	local exclude_items=$(uci -q get $CONFIG_NAME.@$TYPEDSECTION[0].exclude_items|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+	local auth_users=$(echo "$auth_users"|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|:|' => '|g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
+	local readonly_users=$(echo "$readonly_users"|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
 
+	local exclude_items=$(echo "$exclude_items"|sed -E "s/('[^']+'|[^' ]+)/'\1'/g; s|''|'|g; s|' '|',\\\n    '|g; s|^|   |")
 
-[ "$use_auth" -eq "1" ] && sed -Ei "s|(^\\\$use_auth =)(.+)|\1 true;|" "$2" || sed -Ei "s|(^\\\$use_auth =)(.+)|\1 false;|" "$2"
-[ "$global_readonly" -eq "1" ] && sed -Ei "s|(^\\\$global_readonly =)(.+)|\1 true;|" "$2" || sed -Ei "s|(^\\\$global_readonly =)(.+)|\1 false;|" "$2"
-sed -Ei "/^\\\$auth_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$auth_users /a\ $auth_users" "$2"
-sed -Ei "/^\\\$readonly_users /,/\);/{/^ /d}" "$2" && sed -Ei "/^\\\$readonly_users /a\ $readonly_users" "$2"
-sed -Ei "/^\\\$exclude_items /{s|array\(\);|array(\n);|}" "$2" && sed -Ei "/^\\\$exclude_items /a\ $exclude_items" "$2"
-sed -Ei "s|(^\\\$default_timezone =)(.+)|\1 '$(uci -q get system.@system[0].zonename)';|" "$2"
+[ "$use_auth" -eq "1" ] && sed -Ei "s|(^\\\$use_auth =)(.+)|\1 true;|" "$_conf" || sed -Ei "s|(^\\\$use_auth =)(.+)|\1 false;|" "$_conf"
+[ "$global_readonly" -eq "1" ] && sed -Ei "s|(^\\\$global_readonly =)(.+)|\1 true;|" "$_conf" || sed -Ei "s|(^\\\$global_readonly =)(.+)|\1 false;|" "$_conf"
+sed -Ei "/^\\\$auth_users /,/\);/{/^ /d}" "$_conf" && sed -Ei "/^\\\$auth_users /a\ $auth_users" "$_conf"
+sed -Ei "/^\\\$readonly_users /,/\);/{/^ /d}" "$_conf" && sed -Ei "/^\\\$readonly_users /a\ $readonly_users" "$_conf"
+sed -Ei "/^\\\$exclude_items /{s|array\(\);|array(\n);|}" "$_conf" && sed -Ei "/^\\\$exclude_items /a\ $exclude_items" "$_conf"
+sed -Ei "s|(^\\\$default_timezone =)(.+)|\1 '$(uci -q get system.@system[0].zonename)';|" "$_conf"
 if [ -n "$root_path" ]; then
 	sed -Ei "s|(^\\\$root_path =)(.+)|\1 \\\$_SERVER['DOCUMENT_ROOT'].'/${HOMEPATH}$root_path';|; \
 			 s|(^\\\$root_url =)(.+)|\1 '${HOMEPATH}$root_path';| \
-	" "$2"
+	" "$_conf"
 fi
-sed -Ei "s|(^\\\$datetime_format =)(.+)|\1 '$date_format $time_format';|" "$2"
-[ "$show_second" -eq "0" ] && sed -Ei "/^\\\$datetime_format =/{s|:s||}" "$2"
-sed -Ei "s|(^\\\$favicon_path =)(.+)|\1 '$favicon_path';|" "$2"
-if [ "$online_viewer" == "0" ]; then sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 false;|" "$2"
-else sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 '$online_viewer';|" "$2"
+sed -Ei "s|(^\\\$datetime_format =)(.+)|\1 '$date_format $time_format';|" "$_conf"
+[ "$show_second" -eq "0" ] && sed -Ei "/^\\\$datetime_format =/{s|:s||}" "$_conf"
+sed -Ei "s|(^\\\$favicon_path =)(.+)|\1 '$favicon_path';|" "$_conf"
+if [ "$online_viewer" == "0" ]; then sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 false;|" "$_conf"
+else sed -Ei "s|(^\\\$online_viewer =)(.+)|\1 '$online_viewer';|" "$_conf"
 fi
-if [ "$(( $max_upload_size +0 ))" == "0" ]; then sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 26214400;|" "$2" #25M
-else sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 $(( $max_upload_size * 1024**2 ));|" "$2"
+if [ "$(( $max_upload_size +0 ))" == "0" ]; then sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 26214400;|" "$_conf" #25M
+else sed -Ei "s|(^\\\$max_upload_size_bytes =)(.+)|\1 $(( $max_upload_size * 1024**2 ));|" "$_conf"
 fi
 }
 
 start_service() {
 	mkdir /var/etc 2>/dev/null
-	touch "/var/etc/tinyfilemanager.conf"
-	ln -s "/var/etc/tinyfilemanager.conf" "$WORKDIR/config.php" 2>/dev/null
-	init_config "/var/etc/tinyfilemanager.conf"
+	touch "$CONF"
+	ln -s "$CONF" "$WORKDIR/config.php" 2>/dev/null
+	init_config "$CONF"
 
 	config_load "$CONFIG_NAME"
-	config_foreach apply_config "$TYPEDSECTION" "/var/etc/tinyfilemanager.conf"
+	config_foreach validate_section "$TYPEDSECTION" apply_config
 }
 
 service_triggers() {
