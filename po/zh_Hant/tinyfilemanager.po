@@ -135,8 +135,8 @@ msgstr "需要運行在開放網路"
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:32
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:33
-msgid "Restart"
-msgstr "重啟"
+msgid "Reload"
+msgstr "重載"
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:97
 msgid "Show seconds in time"
