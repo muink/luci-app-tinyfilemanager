@@ -46,16 +46,16 @@ return view.extend({
 		o.datatype = "list(string)";
 		o.placeholder = 'user:$2y$10$cFk8K5VQJr...';
 		o.default = 'admin:$2y$10$BewzfQXrlnUihprEgGt7ROMB9NigZcZkkwssIRYznF9fwMuObIZoa';
-		o.optional = true;
 		o.rmempty = false;
+		o.retain = true;
 		o.depends('use_auth', '1');
 
 		o = s.option(form.DynamicList, 'readonly_users', _('Readonly users'));
 		o.datatype = "list(string)";
 		o.placeholder = 'user';
 		o.default = 'user';
-		o.optional = true;
 		o.rmempty = false;
+		o.retain = true;
 		o.depends('use_auth', '1');
 
 		o = s.option(form.Flag, 'global_readonly', _('Global Readonly'));
