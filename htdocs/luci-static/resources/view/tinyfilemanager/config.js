@@ -14,12 +14,14 @@ return view.extend({
 	return Promise.all([
 		L.resolveDefault(fs.read('/var/tinyfilemanager/releaseslist'), null),
 		L.resolveDefault(fs.stat('/usr/libexec/tinyfilemanager-update'), {}),
+		L.resolveDefault(fs.stat('/usr/sbin/nginx'), {}),
 		uci.load('tinyfilemanager'),
 	]);
 	},
 
 	render: function(res) {
 		var releaseslist = res[0] ? res[0].trim().split("\n") : [],
+			has_nginx = res[2].path,
 			pkgversion = '2.5.3';
 
 		var m, s, o;
@@ -36,6 +38,8 @@ return view.extend({
 			return fs.exec('/etc/init.d/tinyfilemanager', ['reload'])
 				.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
 		};
+		if (! has_nginx) 
+			o.description = _('To enable SSL support, you need to install <b>luci-nginx</b> and <b>luci-ssl-nginx</b><br/>');
 
 		o = s.option(form.Flag, 'use_auth', _('Enable Authentication'));
 		o.rmempty = false;
