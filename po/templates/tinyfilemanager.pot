@@ -150,9 +150,7 @@ msgid "Tiny File Manager"
 msgstr ""
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:42
-msgid ""
-"To enable SSL support, you need to install <b>luci-nginx</b> and <b>luci-ssl-"
-"nginx</b><br/>"
+msgid "To enable SSL support, you need to install <b>%s</b><br/>"
 msgstr ""
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:170

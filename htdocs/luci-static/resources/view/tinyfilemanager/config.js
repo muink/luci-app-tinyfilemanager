@@ -39,7 +39,7 @@ return view.extend({
 				.catch(function(e) { ui.addNotification(null, E('p', e.message), 'error') });
 		};
 		if (! has_nginx) 
-			o.description = _('To enable SSL support, you need to install <b>luci-nginx</b> and <b>luci-ssl-nginx</b><br/>');
+			o.description = _('To enable SSL support, you need to install <b>%s</b><br/>').format(['php8-nginx']);
 
 		o = s.option(form.Flag, 'use_auth', _('Enable Authentication'));
 		o.rmempty = false;

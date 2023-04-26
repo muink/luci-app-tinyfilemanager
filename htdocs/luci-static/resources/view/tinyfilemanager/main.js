@@ -11,7 +11,7 @@ return view.extend({
 
 	render: function() {
 		return E('iframe', {
-			src: window.location.protocol + '//' + window.location.hostname + '/tinyfilemanager/index.php',
+			src: window.location.protocol + '//' + window.location.hostname + '/tinyfilemanager/',
 			style: 'width: 100%; min-height: 100vh; border: none; border-radius: 3px;'
 		});
 	}

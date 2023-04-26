@@ -7,6 +7,6 @@ uci changes uhttpd|grep . >/dev/null && uci commit uhttpd
 /etc/init.d/uhttpd reload
 
 # nginx
-[ -n $(command -v nginx) ] && /etc/init.d/nginx reload
+[ -n "$(command -v nginx)" ] && /etc/init.d/nginx reload
 
 exit 0
