@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-03-04 19:01+0100\n"
+"PO-Revision-Date: 2023-03-26 21:32+0100\n"
 "Last-Translator: muink <hukk1996@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstinyfilemanager/zh_Hans/>\n"
@@ -161,8 +161,8 @@ msgid "Tiny File Manager"
 msgstr ""
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:42
-msgid "To enable SSL support, you need to install <b>%s</b><br/>"
-msgstr "要启用 SSL 支持必须先安装 <b>%s</b><br/>"
+msgid "To enable SSL support, you may need to install <b>%s</b><br/>"
+msgstr "要启用 SSL 支持可能需先安装 <b>%s</b><br/>"
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:170
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:171
