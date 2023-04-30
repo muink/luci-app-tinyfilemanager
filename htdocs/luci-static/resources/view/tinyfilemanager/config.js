@@ -107,11 +107,13 @@ return view.extend({
 		o.placeholder = '/etc/tinyfilemanager/favicon.png';
 		o.optional = true;
 		o.rmempty = false;
+		o.retain = true;
 
 		o = s.option(form.DynamicList, 'exclude_items', _('Exclude Files/Folders'));
 		o.datatype = "list(string)";
 		o.optional = true;
 		o.rmempty = false;
+		o.retain = true;
 
 		o = s.option(form.ListValue, 'online_viewer', _('Online Docs viewer'),
 			_('Requires running on open network'));
@@ -137,15 +139,15 @@ return view.extend({
 		o.value('socks5h', 'SOCKS5H');
 		o.default = 'socks5';
 		o.rmempty = false;
-		o.depends('proxy_enabled', '1');
 		o.retain = true;
+		o.depends('proxy_enabled', '1');
 
 		o = s.option(form.Value, 'proxy_server', _('Proxy Server'));
 		o.datatype = "ipaddrport(1)";
 		o.placeholder = '192.168.1.10:1080';
 		o.rmempty = false;
-		o.depends('proxy_enabled', '1');
 		o.retain = true;
+		o.depends('proxy_enabled', '1');
 
 		o = s.option(form.Button, '_check_update', _('Check update'));
 		o.inputtitle = _('Check update');
