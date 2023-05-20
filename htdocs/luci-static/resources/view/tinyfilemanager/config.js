@@ -45,7 +45,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(form.DynamicList, 'auth_users', _('Login user name and passwd hash'),
-			_('You can generate new passwd in <b>File Manager -> Admin -> Help -> Generate new</b> or <a href="%s"><b>Here</b></a>.').format('https://tinyfilemanager.github.io/docs/pwd.html'));
+			_('You can generate new passwd in <b>File Manager -> Admin -> Help -> Generate new</b> or <a href="%s" target="_blank"><b>Here</b></a>.').format('https://tinyfilemanager.github.io/docs/pwd.html'));
 
 		o.datatype = "list(string)";
 		o.placeholder = 'user:$2y$10$cFk8K5VQJr...';

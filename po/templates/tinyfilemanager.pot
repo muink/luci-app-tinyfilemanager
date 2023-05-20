@@ -185,7 +185,7 @@ msgstr ""
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:48
 msgid ""
 "You can generate new passwd in <b>File Manager -> Admin -> Help -> Generate "
-"new</b> or <a href=\"%s\"><b>Here</b></a>."
+"new</b> or <a href=\"%s\" target=\"_blank\"><b>Here</b></a>."
 msgstr ""
 
 #: applications/luci-app-tinyfilemanager/htdocs/luci-static/resources/view/tinyfilemanager/config.js:97
