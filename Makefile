@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_NAME:=luci-app-tinyfilemanager
-PKG_VERSION:=2.5.3-20231028
+PKG_VERSION:=2.5.3-20231117
 #PKG_RELEASE:=1
 
 LUCI_TITLE:=LuCI Tiny File Manager
@@ -31,7 +31,7 @@ sed -Ei "s|^(post_max_size) *=.*$$|\1 = $$total_size_limit|; \
          s|^(max_file_uploads) *=.*$$|\1 = $$otime_uploads_limit|" \
 "$${IPKG_INSTROOT}/etc/php.ini"
 # unpack
-busybox tar -C "$${IPKG_INSTROOT}/www/tinyfilemanager" -xzf "$${IPKG_INSTROOT}/www/tinyfilemanager/index.tgz"
+tar -C "$${IPKG_INSTROOT}/www/tinyfilemanager" -xzf "$${IPKG_INSTROOT}/www/tinyfilemanager/index.tgz"
 rm -f "$${IPKG_INSTROOT}/www/tinyfilemanager/index.tgz"
 endef
 
