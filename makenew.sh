@@ -30,7 +30,8 @@ cd $WORKDIR
 rm -rf *
 
 # Download Repository
-curl -L ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C "$WORKDIR"
+grep -qE "^(master|main)$" <<< "$VERSION" && refs=heads || refs=tags
+curl -L https://codeload.github.com/prasathmani/tinyfilemanager/tar.gz/refs/$refs/$VERSION | tar -xvz -C "$WORKDIR"
 
 # Version Check
 if   [ -z "$(sed -En "/^\\\$external = array\(/,/^\);/p" "$PKG_DIR/$INDEXPHP")" ]; then

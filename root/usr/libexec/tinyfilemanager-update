@@ -33,7 +33,8 @@ fi
 rm -rf *
 
 # Download Repository
-curl -sSL ${REPOURL}/archive/refs/tags/${VERSION}.tar.gz | tar -xvz -C /tmp
+grep -qE "^(master|main)$" <<< "$VERSION" && refs=heads || refs=tags
+curl -sSL https://codeload.github.com/prasathmani/tinyfilemanager/tar.gz/refs/$refs/$VERSION | tar -xvz -C /tmp
 
 # Version Check
 if   [ -z "$(sed -En "/^\\\$external = array\(/,/^\);/p" /tmp/$PKG_DIR/$INDEXPHP)" ]; then
