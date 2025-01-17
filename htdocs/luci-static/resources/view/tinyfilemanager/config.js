@@ -10,7 +10,7 @@ return view.extend({
 //	handleSave: null,
 //	handleReset: null,
 
-	load: function() {
+	load() {
 	return Promise.all([
 		L.resolveDefault(fs.read('/var/tinyfilemanager/releaseslist'), null),
 		L.resolveDefault(fs.stat('/usr/libexec/tinyfilemanager-update'), {}),
@@ -19,7 +19,7 @@ return view.extend({
 	]);
 	},
 
-	render: function(res) {
+	render(res) {
 		var releaseslist = res[0] ? res[0].trim().split("\n") : [],
 			has_location = res[2].path,
 			pkgversion = '2.6';
