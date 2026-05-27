@@ -2,6 +2,8 @@ location /tinyfilemanager/ {
 	index index.php;
 
 	location ~ \.php$ {
+		try_files $uri =404;
+
 		# Mitigate https://httpoxy.org/ vulnerabilities
 		fastcgi_param HTTP_PROXY "";
 
